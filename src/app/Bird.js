@@ -1,4 +1,4 @@
-export default class Bird {
+module.exports = class Bird {
     constructor(ctx) {
         this.xPos = ctx.canvas.width / 2;
         this.yPos = ctx.canvas.height / 2;
@@ -20,10 +20,14 @@ export default class Bird {
     animateUp(distance) {
         this.movingUp = true;
         window.requestAnimationFrame(() => {
-            distance -= this.speed;
-            this.yPos -= this.speed;
-            if (distance > 0) {
+            if (distance >= this.speed) {
+                this.yPos -= this.speed;
+                distance -= this.speed;
                 this.animateUp(distance);
+            } else if (distance > 0) {
+                this.yPos -= distance;
+                distance -= distance;
+                this.animateUp(distance)
             } else {
                 this.movingUp = false;
                 this.animateDown();
@@ -35,7 +39,11 @@ export default class Bird {
         window.requestAnimationFrame(() => {
             if (!this.movingUp) {
                 if (this.yPos + this.radius < this.ctx.canvas.height) {
-                    this.yPos += this.speed;
+                    if (this.ctx.canvas.height - (this.yPos + this.radius) < this.speed) {
+                        this.yPos += this.ctx.canvas.height - (this.yPos + this.radius);
+                    } else {
+                        this.yPos += this.speed;
+                    }
                     this.animateDown();
                 } else {
                     this.alive = false;
@@ -43,4 +51,4 @@ export default class Bird {
             }
         });
     }
-}
+};

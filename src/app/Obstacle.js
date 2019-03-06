@@ -1,4 +1,4 @@
-export default class Obstacle {
+module.exports = class Obstacle {
     constructor (ctx, position, height) {
         this.width = 60;
         this.height = height;
@@ -33,4 +33,4 @@ export default class Obstacle {
     hasLeftScreen() {
         return this.xPos + this.width < 0;
     }
-}
+};

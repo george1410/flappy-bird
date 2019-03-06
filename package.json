@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron-prebuilt-compile": "^4.0.0"
+    "electron": "^4.0.7"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jest": "^24.1.0"
+  }
 }

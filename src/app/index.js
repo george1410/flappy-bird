@@ -1,5 +1,5 @@
-import Bird from './Bird.js';
-import Obstacle from './Obstacle.js';
+const Bird = require('./Bird.js');
+const Obstacle = require('./Obstacle.js');
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
