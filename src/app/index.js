@@ -1,5 +1,6 @@
 const Bird = require('./Bird.js');
 const Obstacle = require('./Obstacle.js');
+const Score = require('./Score.js');
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -8,20 +9,17 @@ canvas.width = window.innerWidth;
 document.body.appendChild(canvas);
 
 const bird = new Bird(ctx);
-const obs = new Obstacle(ctx, 'TOP', 170);
-const obs1 = new Obstacle(ctx, 'BOTTOM', 250);
+const score = new Score(ctx);
+
+let running = false;
 
 let obstacles = [];
-obstacles.push(obs, obs1);
 
 window.onkeyup = (e) => {
     if (e.key === ' ' && bird.alive) {
         bird.jump();
-        if (!obs.moving) {
-            obs.startMove();
-            obs1.startMove();
-        }
     }
+    running = true;
 };
 
 drawGame();
@@ -34,16 +32,21 @@ function drawGame() {
             obstacles.forEach(obstacle => {
                 obstacle.draw();
             });
-            
+            score.draw();
             drawGame();
         }
         obstacles.forEach((obs) => {
             if (isTouching(bird, obs)) {
                 bird.alive = false;
+                console.log(score);
+            }
+            if (running && !obs.counted && (obs.xPos + obs.width < ctx.canvas.width / 2 - bird.radius) && obs.position === 'TOP') {
+                score.currentScore++;
+                obs.counted = true;
             }
         });
         obstacles = obstacles.filter(ob => !ob.hasLeftScreen());
-        if (obstacles.length === 0) {
+        if (obstacles.length === 0 && running) {
             newObstacles();
         }
     });
@@ -57,9 +60,11 @@ function newObstacles() {
     let bottomHeight = canvas.height - topHeight - gap;
     console.log(topHeight, bottomHeight);
     obstacles.push(new Obstacle(ctx, 'TOP', topHeight), new Obstacle(ctx, 'BOTTOM', bottomHeight));
-    obstacles.forEach(obstacle => {
-        obstacle.startMove();
-    })
+    if (running) {
+        obstacles.forEach(obstacle => {
+            obstacle.startMove();
+        });
+    }
 }
 
 function isTouching(bird, obs) {

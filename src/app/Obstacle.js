@@ -10,8 +10,9 @@ module.exports = class Obstacle {
         } else {
             this.yPos = this.ctx.canvas.height - this.height;
         }
-        this.moving = false;
         this.speed = 2;
+        this.passedBird = false;
+        this.counted = false;
     }
 
     draw() {
@@ -19,7 +20,6 @@ module.exports = class Obstacle {
     }
 
     startMove() {
-        this.moving = true;
         this.animateLeft();
     }
 
