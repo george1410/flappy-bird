@@ -7,10 +7,12 @@ module.exports = class Bird {
         this.movingUp = false;
         this.speed = 6;
         this.alive = true;
+        this.image = new Image();
+        this.image.src = './bird.png';
     }
 
     draw() {
-        this.ctx.fillRect(this.xPos - this.radius, this.yPos - this.radius, this.radius * 2, this.radius * 2);
+        this.ctx.drawImage(this.image, this.xPos - this.radius, this.yPos - this.radius);
     }
 
     jump() {
