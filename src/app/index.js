@@ -42,13 +42,8 @@ function drawGame() {
             drawGame();
         }
         obstacles.forEach((obs) => {
-            if (isTouching(bird, obs)) {
+            if (obs.isTouching(bird)) {
                 bird.alive = false;
-                console.log(score);
-            }
-            if (running && !obs.counted && (obs.xPos + obs.width < ctx.canvas.width / 2 - bird.radius) && obs.position === 'TOP') {
-                score.currentScore++;
-                obs.counted = true;
             }
         });
         obstacles = obstacles.filter(ob => !ob.hasLeftScreen());
@@ -59,37 +54,10 @@ function drawGame() {
 }
 
 function newObstacles() {
-    let maxHeight = 400;
-    let minHeight = 100;
-    let topHeight = Math.floor((Math.random() * (maxHeight - minHeight + 1))) + minHeight;
-    let gap = 180;
-    let bottomHeight = canvas.height - topHeight - gap;
-    console.log(topHeight, bottomHeight);
-    obstacles.push(new Obstacle(ctx, 'TOP', topHeight), new Obstacle(ctx, 'BOTTOM', bottomHeight));
+    obstacles.push(new Obstacle(ctx));
     if (running) {
         obstacles.forEach(obstacle => {
             obstacle.startMove();
         });
     }
-}
-
-function isTouching(bird, obs) {
-    let birdRightEdge = bird.xPos + bird.radius;
-    let birdTopEdge = bird.yPos - bird.radius;
-    let birdLeftEdge = bird.xPos - bird.radius;
-    let birdBottomEdge = bird.yPos + bird.radius;
-
-     let obsLeftEdge = obs.xPos;
-     let obsBottomEdge = obs.yPos + obs.height;
-     let obsRightEdge = obs.xPos + obs.width;
-     let obsTopEdge = obs.yPos;
-
-    if (obs.position === 'TOP' && birdRightEdge >= obsLeftEdge && birdTopEdge <= obsBottomEdge && birdLeftEdge <= obsRightEdge ) {
-        return true;
-    } else if (obs.position === 'BOTTOM' && birdRightEdge >= obsLeftEdge && birdBottomEdge >= obsTopEdge && birdLeftEdge <= obsRightEdge) {
-        return true;
-    } else {
-        return false;
-    }
-
 }
